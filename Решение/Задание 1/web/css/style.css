@@ -1,0 +1,129 @@
+@font-face {
+    font-family: "ProximaNova";
+    src: url("./font/ProximaNova/proximanova_regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "ProximaNova";
+    src: url("./font/ProximaNova/proximanova_bold.otf") format("opentype");
+    font-weight: bold;
+    font-style: normal;
+}
+.both {
+    clear: both;
+}
+* {
+    color: #262c40;
+    font-family: ProximaNova;
+}
+body {
+    padding: 76px 100px;
+}
+.form-users {
+    margin: 0;
+}
+.form-users label {
+    display: block;
+    margin-bottom: 24px;
+}
+.form-users *[name='term'] {
+    border: 1px #d4defe solid;
+    width: 100%;
+    border-radius: 48px;
+    font-size: 48px;
+    padding: 0 17px;
+    background-image: url("../img/zoom.png");
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+.form-users-list {
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: ". . .";
+    gap: 25px;
+}
+.form-users-list
+, .form-users-list ul
+, .form-users-list li
+, .dialog-list
+, .dialog-list ul
+, .dialog-list li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.form-users-list > div {
+    height: 314px;
+}
+.form-users-dialog
+, .form-users-list-item {
+    color: #8189a3;
+    -webkit-box-shadow:0px 0px 7px 4px rgba(129, 137, 163, 0.1);
+    -moz-box-shadow: 0px 0px 7px 4px rgba(129, 137, 163, 0.1);
+    box-shadow: 0px 0px 7px 4px rgba(129, 137, 163, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    border: 0;
+}
+.form-users-list-item > ul > li {
+    display: block;
+    clear: both;
+}
+.form-users-list-item-name {
+    font-size: 30px;
+    margin: 0 0 24px 0;
+}
+.form-users-list-item-image
+, .form-users-list-item-value {
+    display: inline-block;
+    float: left;
+    line-height: 31px;
+}
+.form-users-list-item-value {
+    color: #8189a3;
+}
+.form-users-list-item-image {
+    width: 31px;
+    height: 31px;
+    margin: 5px 17px 0 0;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.form-users-list-item-phone .form-users-list-item-image {
+    background-image: url("../img/phone.png");
+}
+.form-users-list-item-email .form-users-list-item-image {
+    background-image: url("../img/email.png");
+}
+.form-users-dialog-body-close {
+    cursor: pointer;
+    position: absolute;
+    right: 24px;
+    font-size: 30px;
+    font-weight: bold;
+}
+.form-users-dialog:backdrop {
+}
+.dialog-list-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas: ". .";
+    gap: 0px 25px;
+    line-height: 30px;
+}
+.dialog-footer-header
+, .dialog-list-label {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: normal;
+}
+.dialog-footer-header:after
+, .dialog-list-label:after {
+    content: ":";
+}
+@media screen and (max-width: 768px) {
+    .form-users-list {
+        display: block;
+    }
+}

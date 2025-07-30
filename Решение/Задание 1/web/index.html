@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Task-181</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="./css/style.css">
+    </head>
+    <body>
+        <dialog class="form-users-dialog" data-target=".form-users-dialog-body" data-close=".form-users-dialog-body-close">
+            <span class="form-users-dialog-body-close">X</span>
+            <template class="form-users-dialog-body">
+                <div>
+                    <h2 class="form-users-list-item-name" data-content="name"></h2>
+                    <ul class="dialog-list">
+                        <li class="dialog-list-item">
+                            <span class="dialog-list-label">Телефон</span>
+                            <span class="dialog-list-value" data-content="phone"></span>
+                        </li>
+                        <li class="dialog-list-item">
+                            <span class="dialog-list-label">Почта</span>
+                            <span class="dialog-list-value" data-content="email"></span>
+                        </li>
+                        <li class="dialog-list-item">
+                            <span class="dialog-list-label">Дата приёма</span>
+                            <span class="dialog-list-value" data-content="hire_date"></span>
+                        </li>
+                        <li class="dialog-list-item">
+                            <span class="dialog-list-label">Должность</span>
+                            <span class="dialog-list-value" data-content="position_name"></span>
+                        </li>
+                        <li class="dialog-list-item">
+                            <span class="dialog-list-label">Подразделение</span>
+                            <span class="dialog-list-value" data-content="department"></span>
+                        </li>
+                    </ul>
+                    <div class="dialog-footer">
+                        <h4 class="dialog-footer-header">Дополнительная информация</h4>
+                        <p>Разработчики используют текст в качестве заполнителя макта страницы. Разработчики используют текст в качестве заполнителя макта страницы.
+                    </div>
+                </div>
+            </template>
+        </dialog>
+        <form action="http://127.0.0.1:3000/" class="form-users"
+            data-target=".form-users-list-item-tpl"
+            data-trigger="*[name='term']"
+            data-dialog=".form-users-dialog"
+        >
+            <label>
+                <input type="search" name="term" autofocus>
+            </label>
+            <div class="form-users-list">
+                <template class="form-users-list-item-tpl">
+                    <div class="form-users-list-item">
+                        <h2 class="form-users-list-item-name" data-content="name"></h2>
+                        <ul>
+                            <li class="form-users-list-item-phone">
+                                <span class="form-users-list-item-image"></span>
+                                <span class="form-users-list-item-value" data-content="phone"></span>
+                            </li>
+                            <li class="form-users-list-item-item form-users-list-item-email">
+                                <span class="form-users-list-item-image"></span>
+                                <span class="form-users-list-item-value" data-content="email"></span>
+                            </li>
+                        </ul>
+                        <div class="both"></div>
+                    </div>
+                </template>
+            </div>
+        </form>
+    </body>
+</html>
+<script src="./js/script.js"></script>

@@ -1,12 +1,12 @@
 @font-face {
-    font-family: "ProximaNova";
-    src: url("./font/ProximaNova/proximanova_regular.ttf") format("truetype");
+    font-family: ProximaNova;
+    src: url("/font/regular") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
-    font-family: "ProximaNova";
-    src: url("./font/ProximaNova/proximanova_bold.otf") format("opentype");
+    font-family: ProximaNova;
+    src: url("/font/bold") format("opentype");
     font-weight: bold;
     font-style: normal;
 }
@@ -16,6 +16,7 @@
 * {
     color: #262c40;
     font-family: ProximaNova;
+    font-weight: normal;
 }
 body {
     padding: 76px 100px;
@@ -33,7 +34,7 @@ body {
     border-radius: 48px;
     font-size: 48px;
     padding: 0 17px;
-    background-image: url("../img/zoom.png");
+    background-image: url("/img/zoom");
     background-position: right center;
     background-repeat: no-repeat;
 }
@@ -91,10 +92,10 @@ body {
     background-repeat: no-repeat;
 }
 .form-users-list-item-phone .form-users-list-item-image {
-    background-image: url("../img/phone.png");
+    background-image: url("/img/phone");
 }
 .form-users-list-item-email .form-users-list-item-image {
-    background-image: url("../img/email.png");
+    background-image: url("/img/email");
 }
 .form-users-dialog-body-close {
     cursor: pointer;

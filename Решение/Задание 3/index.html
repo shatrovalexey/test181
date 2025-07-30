@@ -1,0 +1,17 @@
+<% Server.Execute( "include/access_init.html" ) %><!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Test181</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <ul>
+            <%
+                _collaborator_fullnames = ArraySelectAll(XQuery('for $elem in collaborators return $elem/fullname'));
+
+                for (i = 0; i < _collaborator_fullnames.length; i ++) {
+            %><li><%=_collaborator_fullnames[i]%></li><% } %>
+        </ul>
+    </body>
+</html>

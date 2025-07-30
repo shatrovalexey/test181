@@ -66,9 +66,7 @@
 
     nodeFormDialog
         .querySelectorAll(nodeFormDialog?.dataset.close)
-        .forEach(node => {
-            node.addEventListener("click", () => nodeFormDialog.close());
-        });
+        .forEach(node => node.addEventListener("click", () => nodeFormDialog.close()));
 
     nodeFormDialog.addEventListener("click", ({"target": node,}) => {
         if (node === nodeFormDialog)

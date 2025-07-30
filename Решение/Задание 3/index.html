@@ -1,16 +1,16 @@
 <% Server.Execute( "include/access_init.html" ) %><!DOCTYPE html>
 
 <html>
-	<head>
-		<title>Test181</title>
-		<meta charset="utf-8">
-	</head>
-	<body>
-		<ul>
-			<%
-				_collaborator_fullnames = XQuery('for $elem in collaborators return $elem/fullname');
+    <head>
+        <title>Test181</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <ul>
+            <%
+                _collaborator_fullnames = XQuery('for $elem in collaborators return $elem/fullname');
 
-				for (i = _collaborator_fullnames.length - 1; i >= 0; i --) { %><li><%=_collaborator_fullnames[i]%></li><% } %>
-		</ul>
-	</body>
+                for (i = _collaborator_fullnames.length - 1; i >= 0; i --) { %><li><%=_collaborator_fullnames[i]%></li><% } %>
+        </ul>
+    </body>
 </html>

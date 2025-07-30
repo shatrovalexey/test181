@@ -32,7 +32,7 @@ WITH [subdivision_subtree] AS (
     FROM
         [dbo].[subdivisions] AS [s1]
     WHERE
-        [s1].[parent_id] IS null
+        ([s1].[parent_id] IS null)
 
     UNION ALL
 

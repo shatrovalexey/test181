@@ -7,17 +7,16 @@
     const nodeTrTpl = nodeForm.querySelector(nodeForm?.dataset.target);
     const fNodeCloneParse = (nodeTpl, dataItem) => {
         const node = nodeTpl.content.cloneNode(true).firstElementChild;
+        const fReplace = (match, p1) => p1 in dataItem ? dataItem[p1] : match;
 
         [
             ["*[data-content]", nodeItem => nodeItem.textContent = dataItem[nodeItem.dataset.content],]
-            , ["*", nodeItem => Object.entries(nodeItem.attributes)
+            , ["*", nodeItem => Object
+                .entries(nodeItem.attributes)
                 .map(([,{"name": attrName, "value": attrValue,},]) => [attrName, attrValue,])
                 .filter(([attrName,]) => !attrName.startsWith("data-"))
-                .map(([attrName, attrValue,]) => [
-                    attrName
-                    , attrValue.replace(/\{(.+?)\}/ug, (match, p1) => p1 in dataItem ? dataItem[p1] : match)
-                    ,
-                ]).forEach(([attrName, attrValue,]) => nodeItem.setAttribute(attrName, attrValue))
+                .map(([attrName, attrValue,]) => [attrName, attrValue.replace(/\{(.+?)\}/ug, fReplace),])
+                .forEach(([attrName, attrValue,]) => nodeItem.setAttribute(attrName, attrValue))
             ,]
             ,
         ].forEach(([cssSelector, sub,]) => node.querySelectorAll(cssSelector).forEach(sub));

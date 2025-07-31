@@ -8,24 +8,23 @@
     const fNodeCloneParse = (nodeTpl, dataItem) => {
         const node = nodeTpl.content.cloneNode(true).firstElementChild;
 
-        node.querySelectorAll("*[data-content]")
-            .forEach(nodeItem => nodeItem.textContent = dataItem[nodeItem.dataset.content]);
-
-        node.querySelectorAll("*")
-            .forEach(nodeItem => {
-                Object.entries(nodeItem.attributes)
-                    .forEach(([,{"name": attrName, "value": attrValue,},]) => {
-                        nodeItem.setAttribute(attrName, attrValue
-                            .replace(/\{(.+?)\}/ug, (match, p1) => dataItem[p1]));
-                    });
-            });
+        [
+            ["*[data-content]", nodeItem => nodeItem.textContent = dataItem[nodeItem.dataset.content],]
+            , ["*", nodeItem => Object.entries(nodeItem.attributes)
+                .forEach(([,{"name": attrName, "value": attrValue,},]) => nodeItem.setAttribute(
+                    attrName, attrValue.replace(/\{(.+?)\}/ug, (match, p1) => dataItem[p1])
+                ))
+            ,]
+            ,
+        ].forEach(([cssSelector, sub,]) => node.querySelectorAll(cssSelector).forEach(sub));
 
         node.classList.add("clone");
+        nodeTpl.after(node);
 
         return node;
     };
-    const fNodeCloneRemove = ({"parentNode": parent,}, cssSelector = ".clone") => parent
-        .querySelectorAll(cssSelector).forEach(node => node.remove());
+    const fNodeCloneRemove = ({"parentNode": parent,}, cssSelector = ".clone") =>
+        parent.querySelectorAll(cssSelector).forEach(node => node.remove());
 
     const fFormAction = evt => {
         evt?.preventDefault();
@@ -35,43 +34,32 @@
 
         fetch(nodeFormAction)
             .then(data => data.json())
-            .then(({"data": data, "data": {"length": len,},}) => {
-                if (!len) throw data;
-
-                return data;
-            })
+            .then(({"data": data, "data": {"length": len,},}) => {if (!len) throw data; return data;})
             .then(data => data.reverse())
-            .then(data => data.forEach(dataItem => {
-                const nodeTr = fNodeCloneParse(nodeTrTpl, dataItem);
-
-                nodeTr.classList.add("clone");
-                nodeTrTpl.after(nodeTr);
-                nodeTr.addEventListener("click", evt => {
+            .then(data => data.forEach(dataItem => fNodeCloneParse(nodeTrTpl, dataItem)
+                .addEventListener("click", evt => {
                     evt.preventDefault();
 
-                    fNodeCloneRemove(nodeFormDialogBodyTpl);
+                    [[fNodeCloneRemove,], [fNodeCloneParse, dataItem,],]
+                        .forEach(([sub, ... args]) => sub(nodeFormDialogBodyTpl, ... args));
 
-                    const nodeFormDialogBody = fNodeCloneParse(nodeFormDialogBodyTpl, dataItem);
-
-                    nodeFormDialogBodyTpl.after(nodeFormDialogBody);
                     nodeFormDialog.showModal();
-                });
-            }))
-            .catch(exception => {
-                throw exception;
-            });
+                })
+            ))
+            .catch(exception => console.log(exception));
     };
 
-    nodeFormDialog
-        .querySelectorAll(nodeFormDialog?.dataset.close)
-        .forEach(node => node.addEventListener("click", () => nodeFormDialog.close()));
-
-    nodeFormDialog.addEventListener("click", ({"target": node,}) => {
-        if (node === nodeFormDialog)
-            nodeFormDialog.close();
-    });
-
     nodeFormInput.addEventListener("input", fFormAction);
+
+    [["click", () => nodeFormDialog.close(),],]
+        .forEach(([evtName, sub,]) => {
+            nodeFormDialog
+                .querySelectorAll(nodeFormDialog?.dataset.close)
+                .forEach(node => node.addEventListener(evtName, sub));
+
+            nodeFormDialog
+                .addEventListener(evtName, evt => [evt.target,].filter(node => node === nodeFormDialog).forEach(sub));
+        });
 
     fFormAction();
 }))(window, ".form-users");

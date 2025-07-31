@@ -46,14 +46,12 @@
         if (!fNodeFormEnable(false)) return false;
 
         fNodeCloneRemove(nodeTrTpl);
-
         nodeFormAction.search = new URLSearchParams(new FormData(nodeForm));
 
         fetch(nodeFormAction)
             .then(data => data.json())
             .then(({"data": data, "data": {"length": len,},}) => {if (!len) throw data; return data;})
-            .then(data => data.reverse())
-            .then(data => data.forEach(dataItem => fNodeCloneParse(nodeTrTpl, dataItem)
+            .then(data => data.reverse().forEach(dataItem => fNodeCloneParse(nodeTrTpl, dataItem)
                 .addEventListener("click", evt => {
                     evt.preventDefault();
 
@@ -65,10 +63,12 @@
             ))
             .catch(exception => console.log(exception))
             .finally(() => fNodeFormEnable(true));
+
+        return false;
     };
 
-    [["submit", nodeFormInput,], ["input", nodeForm,],]
-        .forEach(([evtName, node,]) => node.addEventListener(evtName, fFormAction));
+    [["input", nodeFormInput,], ["submit", nodeForm,],]
+        .forEach(([evtName, node,]) => nodeForm.addEventListener(evtName, fFormAction));
 
     [["click", () => nodeFormDialog.close(),],]
         .forEach(([evtName, sub,]) => {

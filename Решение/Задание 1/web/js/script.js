@@ -35,8 +35,8 @@
 
         fetch(nodeFormAction)
             .then(data => data.json())
-            .then(({"data": data,}) => {
-                if (!data?.length) throw data;
+            .then(({"data": data, "data": {"length": len,},}) => {
+                if (!len) throw data;
 
                 return data;
             })
@@ -44,15 +44,13 @@
             .then(data => data.forEach(dataItem => {
                 const nodeTr = fNodeCloneParse(nodeTrTpl, dataItem);
 
-                nodeTr.firstElementChild.classList.add("clone");
+                nodeTr.classList.add("clone");
                 nodeTrTpl.after(nodeTr);
-
                 nodeTr.addEventListener("click", evt => {
                     evt.preventDefault();
 
                     fNodeCloneRemove(nodeFormDialogBodyTpl);
 
-                    const {"target": node,} = evt;
                     const nodeFormDialogBody = fNodeCloneParse(nodeFormDialogBodyTpl, dataItem);
 
                     nodeFormDialogBodyTpl.after(nodeFormDialogBody);

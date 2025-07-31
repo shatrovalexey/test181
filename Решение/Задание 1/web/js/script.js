@@ -67,8 +67,8 @@
             .finally(() => fNodeFormEnable(true));
     };
 
-	[["submit", nodeFormInput,], ["input", nodeForm,],]
-		.forEach(([evtName, node,]) => node.addEventListener(evtName, fFormAction));
+    [["submit", nodeFormInput,], ["input", nodeForm,],]
+        .forEach(([evtName, node,]) => node.addEventListener(evtName, fFormAction));
 
     [["click", () => nodeFormDialog.close(),],]
         .forEach(([evtName, sub,]) => {

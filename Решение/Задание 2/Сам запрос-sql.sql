@@ -61,10 +61,12 @@ WITH [subdivision_subtree] AS (
         , [stl1].[level]
 )
 SELECT
-    [cc1].*
-    , [c1].[id]
+    [c1].[id]
     , [c1].[name]
     , [s1].[name] AS [sub_name]
+    , [cc1].[id] AS [sub_id]
+    , [cc1].[level] AS [sub_level]
+    , [cc1].[count] AS [colls_count]
 FROM
     [dbo].[collaborators] AS [c1]
 

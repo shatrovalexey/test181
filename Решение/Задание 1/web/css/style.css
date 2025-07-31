@@ -123,6 +123,17 @@ body {
 , .dialog-list-label:after {
     content: ":";
 }
+.form-users-list:not(:has(.clone)) {
+    display: block;
+}
+.form-users-list:not(:has(.clone)):before {
+    content: attr(data-empty);
+    display: block;
+    text-align: center;
+    font-size: 400%;
+    color: #262c40;
+    font-weight: bold;
+}
 @media screen and (max-width: 768px) {
     .form-users-list {
         display: block;

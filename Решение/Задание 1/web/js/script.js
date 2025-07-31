@@ -26,8 +26,25 @@
     const fNodeCloneRemove = ({"parentNode": parent,}, cssSelector = ".clone") =>
         parent.querySelectorAll(cssSelector).forEach(node => node.remove());
 
+    const fNodeFormEnable = bool => {
+        const isPending = "pending" in nodeForm.dataset;
+
+        if ((!bool && isPending) || (bool && !isPending)) return false;
+        if (bool) delete nodeForm.dataset.pending;
+        else nodeForm.dataset.pending = true;
+
+        [... nodeForm.elements]
+            .filter(node => node !== nodeFormInput)
+            .forEach(node => node.disabled = !bool);
+
+        return true;
+    };
+
     const fFormAction = evt => {
         evt?.preventDefault();
+
+        if (!fNodeFormEnable(false)) return false;
+
         fNodeCloneRemove(nodeTrTpl);
 
         nodeFormAction.search = new URLSearchParams(new FormData(nodeForm));
@@ -46,7 +63,8 @@
                     nodeFormDialog.showModal();
                 })
             ))
-            .catch(exception => console.log(exception));
+            .catch(exception => console.log(exception))
+            .finally(() => fNodeFormEnable(true));
     };
 
     nodeFormInput.addEventListener("input", fFormAction);

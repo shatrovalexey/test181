@@ -76,11 +76,11 @@ FROM
         INNER JOIN [subdivision_subtree] AS [sd1]
             ON ([c1].[subdivision_id] = [sd1].[id])
 
-        INNER JOIN [dbo].[collaborators] AS [c2]
-            ON ([s1].[id] <> [c2].[subdivision_id])
-
         INNER JOIN [subdivision_colls_count] AS [cc1]
             ON ([sd1].[id] = [cc1].[id])
+
+        LEFT OUTER JOIN [dbo].[collaborators] AS [c2]
+            ON ([s1].[id] <> [c2].[subdivision_id])
 WHERE
     ([c1].[age] < @collaborator_age_limit)
         AND ([c2].[id] = @collaborator_id)

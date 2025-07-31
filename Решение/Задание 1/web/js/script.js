@@ -11,9 +11,13 @@
         [
             ["*[data-content]", nodeItem => nodeItem.textContent = dataItem[nodeItem.dataset.content],]
             , ["*", nodeItem => Object.entries(nodeItem.attributes)
-                .forEach(([,{"name": attrName, "value": attrValue,},]) => nodeItem.setAttribute(
-                    attrName, attrValue.replace(/\{(.+?)\}/ug, (match, p1) => dataItem[p1])
-                ))
+                .map(([,{"name": attrName, "value": attrValue,},]) => [attrName, attrValue,])
+                .filter(([attrName,]) => !attrName.startsWith("data-"))
+                .map(([attrName, attrValue,]) => [
+                    attrName
+                    , attrValue.replace(/\{(.+?)\}/ug, (match, p1) => p1 in dataItem ? dataItem[p1] : match)
+                    ,
+                ]).forEach(([attrName, attrValue,]) => nodeItem.setAttribute(attrName, attrValue))
             ,]
             ,
         ].forEach(([cssSelector, sub,]) => node.querySelectorAll(cssSelector).forEach(sub));

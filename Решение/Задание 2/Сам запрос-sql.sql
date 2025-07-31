@@ -84,4 +84,4 @@ FROM
 WHERE
     ([c1].[age] < @collaborator_age_limit)
         AND ([c2].[id] = @collaborator_id)
-        AND ([c1].[id] NOT IN (100055, 100059))
+        AND ([c1].[id] NOT IN (100055, 100059));

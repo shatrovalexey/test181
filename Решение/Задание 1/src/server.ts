@@ -34,8 +34,9 @@ fastify.get('/users', (req: FastifyRequest<SearchRoute>, res) => {
                 JSON.parse(data)
                     .filter(user => user.name.toLowerCase().includes(req.query.term?.toLowerCase() ?? ''))
             ));
-        } catch(e) {
-            fastify.log.error(e);
+        } catch(exception) {
+            fastify.log.error(exception);
+
             return res.status(500).send(errorRes("Server error"))
         }
     })

@@ -1,12 +1,12 @@
 @font-face {
     font-family: ProximaNova;
-    src: url("/font/regular") format("truetype");
+    src: url("/font/ProximaNova/proximanova_regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: ProximaNova;
-    src: url("/font/bold") format("opentype");
+    src: url("/font/ProximaNova/proximanova_bold.otf") format("opentype");
     font-weight: bold;
     font-style: normal;
 }
@@ -34,7 +34,7 @@ body {
     border-radius: 48px;
     font-size: 48px;
     padding: 0 17px;
-    background-image: url("/img/zoom");
+    background-image: url("/img/zoom.png");
     background-position: right center;
     background-repeat: no-repeat;
 }
@@ -92,10 +92,10 @@ body {
     background-repeat: no-repeat;
 }
 .form-users-list-item-phone .form-users-list-item-image {
-    background-image: url("/img/phone");
+    background-image: url("/img/phone.png");
 }
 .form-users-list-item-email .form-users-list-item-image {
-    background-image: url("/img/email");
+    background-image: url("/img/email.png");
 }
 .form-users-dialog-body-close {
     cursor: pointer;

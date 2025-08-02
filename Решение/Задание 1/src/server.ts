@@ -3,49 +3,37 @@ import fs from 'fs';
 const { HOST, PORT } = require('./config');
 import cors from '@fastify/cors';
 import Fastify, { FastifyRequest } from 'fastify';
+import fastifyStatic from '@fastify/static';
 import { errorRes, successRes } from './utils/response';
 import path from 'path';
 
 const fastify = Fastify({ logger: true });
 
-fastify.register(cors, {
-  origin: '*',
-  methods: ['GET'],
-});
+[
+    [cors, {
+        "origin": "*"
+        , "methods": ["GET",]
+        ,
+    },]
+    , [fastifyStatic, {
+        "root": path.join(__dirname, "../web")
+        , "prefix": "/"
+        ,
+    }]
+    ,
+].forEach(([... args]) => fastify.register(... args));
 
 const dataPath = path.join(__dirname, 'data', 'users.json');
-
-fastify.get('/', (req: FastifyRequest<SearchRoute>, res) => fs.readFile("web/index.html", "utf8", (err, data) => {
-    return res.type('text/html').send(data);
-}));
-
-[
-    ["/js", "js/script.js", "application/javascript",]
-    , ["/css", "css/style.css", "text/css",]
-    , ["/font/regular", "font/ProximaNova/proximanova_regular.ttf", "font/ttf",]
-    , ["/font/bold", "font/ProximaNova/proximanova_bold.otf", "font/otf",]
-    , ["/img/email", "img/email.png", "image/x-png",]
-    , ["/img/phone", "img/phone.png", "image/x-png",]
-    , ["/img/zoom", "img/zoom.png", "image/x-png",]
-    ,
-].forEach(([route, path, mime,]) => fastify.get(route
-    , (req: FastifyRequest<SearchRoute>, res) => res.type(mime).send(fs.readFileSync(`web/${path}`))));
 
 fastify.get('/users', (req: FastifyRequest<SearchRoute>, res) => {
     fs.readFile(dataPath, 'utf8', (err, data) => {
         try {
-            if (err) {
-                fastify.log.error('File read failed: ' + err);
-                return res.code(500).send(errorRes("Server error"));
-            }
+            if (err) throw err;
 
-            const users: User[] = JSON.parse(data);
-            
-            const result = users
-                .filter((elem) => elem.name.toLowerCase()
-                .search(req.query.term?.toLowerCase() ?? '') !== -1);
-    
-            return res.type('application/json').send(successRes<User[]>(result));
+            return res.type('application/json').send(successRes<User[]>(
+                JSON.parse(data)
+                    .filter(user => user.name.toLowerCase().includes(req.query.term?.toLowerCase() ?? ''))
+            ));
         } catch(e) {
             fastify.log.error(e);
             return res.status(500).send(errorRes("Server error"))

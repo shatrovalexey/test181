@@ -18,8 +18,7 @@ const fastify = Fastify({ logger: true });
     , [fastifyStatic, {
         "root": path.join(__dirname, "../web")
         , "prefix": "/"
-        ,
-    }]
+	,}]
     ,
 ].forEach(([... args]) => fastify.register(... args));
 

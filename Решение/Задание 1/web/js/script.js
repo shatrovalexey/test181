@@ -36,7 +36,7 @@
         if (bool) delete nodeForm.dataset.pending;
         else nodeForm.dataset.pending = true;
 
-        [... nodeForm.elements]
+        Array.from(nodeForm.elements)
             .filter(node => node !== nodeFormInput)
             .forEach(node => node.disabled = !bool);
 

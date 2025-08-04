@@ -37,8 +37,10 @@
         else nodeForm.dataset.pending = true;
 
         Array.from(nodeForm.elements)
-            .filter(node => node !== nodeFormInput)
+            // .filter(node => node !== nodeFormInput)
             .forEach(node => node.disabled = !bool);
+
+        if (bool) nodeFormInput.focus();
 
         return true;
     };

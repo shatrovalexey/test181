@@ -1,10 +1,11 @@
-(({"document": doc, "location": loc,}, formCssSelector) => doc.addEventListener("DOMContentLoaded", () => {
+(({"document": doc, "location": loc,}, formCssSelector, tplItemCssClass) => doc.addEventListener("DOMContentLoaded", () => {
     const nodeForm = doc.querySelector(formCssSelector);
     const nodeFormInput = nodeForm.querySelector(nodeForm?.dataset.trigger);
     const nodeFormDialog = doc.querySelector(nodeForm?.dataset.dialog);
     const nodeFormDialogBodyTpl = nodeFormDialog.querySelector(nodeFormDialog?.dataset.target);
     const nodeFormAction = new URL(nodeForm?.getAttribute("action"), loc.origin);
     const nodeTrTpl = nodeForm.querySelector(nodeForm?.dataset.target);
+    const tplItemCssSelector = `.${tplItemCssClass}`;
     const fNodeCloneParse = (nodeTpl, dataItem) => {
         const node = nodeTpl.content.cloneNode(true).firstElementChild;
         const fReplace = (match, p1) => p1 in dataItem ? dataItem[p1] : match;
@@ -21,13 +22,14 @@
             ,
         ].forEach(([cssSelector, sub,]) => node.querySelectorAll(cssSelector).forEach(sub));
 
-        node.classList.add("clone");
+        node.classList.add(tplItemCssClass);
+        node.dataset.data = JSON.stringify(dataItem);
         nodeTpl.after(node);
 
         return node;
     };
-    const fNodeCloneRemove = ({"parentNode": parent,}, cssSelector = ".clone") =>
-        parent.querySelectorAll(cssSelector).forEach(node => node.remove());
+    const fNodeCloneRemove = ({"parentNode": parent,}) =>
+        parent.querySelectorAll(tplItemCssSelector).forEach(node => node.remove());
 
     const fNodeFormEnable = bool => {
         const isPending = "pending" in nodeForm.dataset;
@@ -36,41 +38,52 @@
         if (bool) delete nodeForm.dataset.pending;
         else nodeForm.dataset.pending = true;
 
-        Array.from(nodeForm.elements)
-            // .filter(node => node !== nodeFormInput)
-            .forEach(node => node.disabled = !bool);
+        [... nodeForm.elements].forEach(node => node.disabled = !bool);
 
         if (bool) nodeFormInput.focus();
 
         return true;
     };
 
+    const fFormActionData = (url, success, done) => 
+        fetch(url)
+            .then(data => data.json())
+            .then(({"data": data, "data": {"length": len,},}) => {if (!len) throw data; return data;})
+            .then(data => data.reverse())
+            .then(data => data.forEach(success))
+            .catch(exception => console.log(exception))
+            .finally(done);
+
     const fFormAction = evt => {
         evt?.preventDefault();
 
-        if (!fNodeFormEnable(false)) return false;
-
-        fNodeCloneRemove(nodeTrTpl);
         nodeFormAction.search = new URLSearchParams(new FormData(nodeForm));
 
-        fetch(nodeFormAction)
-            .then(data => data.json())
-            .then(({"data": data, "data": {"length": len,},}) => {if (!len) throw data; return data;})
-            .then(data => data.reverse().forEach(dataItem => fNodeCloneParse(nodeTrTpl, dataItem)
-                .addEventListener("click", evt => {
-                    evt.preventDefault();
+        if (!fNodeFormEnable(false)) return;
 
-                    [[fNodeCloneRemove,], [fNodeCloneParse, dataItem,],]
-                        .forEach(([sub, ... args]) => sub(nodeFormDialogBodyTpl, ... args));
-
-                    nodeFormDialog.showModal();
-                })
-            ))
-            .catch(exception => console.log(exception))
-            .finally(() => fNodeFormEnable(true));
-
-        return false;
+        [
+            [fNodeCloneRemove, nodeTrTpl,]
+            , [
+                fFormActionData
+                , nodeFormAction
+                , dataItem => fNodeCloneParse(nodeTrTpl, dataItem)
+                , () => fNodeFormEnable(true)
+                ,
+            ]
+        ].forEach(([sub, ... args]) => sub(... args));
     };
+
+    nodeTrTpl.parentNode.addEventListener("click", evt => {
+        const node = evt.target.closest(tplItemCssSelector);
+
+        if (!node) return;
+
+        [[fNodeCloneRemove,], [fNodeCloneParse, JSON.parse(node.dataset.data),],]
+            .forEach(([sub, ... args]) => sub(nodeFormDialogBodyTpl, ... args));
+
+        nodeFormDialog.showModal();
+        evt.preventDefault();
+    });
 
     [["input", nodeFormInput,], ["submit", nodeForm,],]
         .forEach(([evtName, node,]) => nodeForm.addEventListener(evtName, fFormAction));
@@ -86,4 +99,4 @@
         });
 
     fFormAction();
-}))(window, ".form-users");
+}))(window, ".form-users", "clone");
